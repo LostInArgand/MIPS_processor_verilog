@@ -23,37 +23,44 @@
 module Instruction_Fetch_Module(
     input RESET,
     input CLK,
-    input PC_write_enable,
-    output reg [31:0]  instruction_reg
+//    input PC_write_enable,
+    output reg [31:0]  IR
     );
-    reg [31:0] PC_out;
-    wire [31:0] PC_next;
+    reg [31:0] PC;
+    wire [31:0] PC_out;
+    wire [31:0] PC_in;
+    wire [31:0] read_address;
+    wire [31:0] instruction;
     
-    reg [31:0] instruction_mem [0:4096]; //Let the instruction space be 4K x 31 bits
+    reg [31:0] instruction_memory [0:4096]; //Let the instruction space be 4K x 31 bits
 
 ////////////////Program Counter Adder/////////////////
 
-    assign PC_next = PC_out + 32'h00000004;
+    assign PC_in = PC_out + 32'h00000004;
 
 //////////////////////////////////////////////////////
 
 ////////////////Program Counter part/////////////////
+    // connect PC_out wire to PC
+    assign PC_out = PC;
+
     //Inititial value
     initial begin
-        PC_out <= 32'h00000000;
+        PC <= 32'h00000000;
     end
     
     //PC latches at negative edge
     always @(posedge CLK)
     begin
         //reset program counter
-        if (RESET) PC_out <= 32'h00000000;
+        if (RESET) PC <= 32'h00000000;
         // update program counter
         else
         begin
             // only update the PC if PC write is active
             // unless PC will update at every clock pulse
-            if (PC_write_enable) PC_out <= PC_next;
+//            if (PC_write_enable) PC <= PC_in;
+            PC <= PC_in;
         end
     end
 //////////////////////////////////////////////////////
@@ -61,15 +68,15 @@ module Instruction_Fetch_Module(
 //////////////////Instruction Memory///////////////////
     //Instruction memory is byte addressible.
     //Hence the 0th and the 1st bits of the address is ignored
-    assign address = PC_out;    //Implicit assingment
-    assign instruction =  instruction_mem[address >> 2];
+    assign read_address = PC_out;
+    assign instruction =  instruction_memory[read_address >> 2];
 //////////////////////////////////////////////////////
 
 //////////////////Instruction Register///////////////////
     //Instruction Register is latched at positive edge
     always @(negedge CLK)
     begin
-        instruction_reg <= instruction;
+        IR <= instruction;
     end
 //////////////////////////////////////////////////////
 endmodule
