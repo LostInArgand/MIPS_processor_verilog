@@ -24,7 +24,8 @@ module Instruction_Fetch_Module(
     input RESET,
     input CLK,
 //    input PC_write_enable,
-    output reg [31:0]  IR
+    output reg [31:0]  IR,
+    output wire [31:0] adder_output
     );
     reg [31:0] PC;
     wire [31:0] PC_out;
@@ -36,7 +37,7 @@ module Instruction_Fetch_Module(
 
 ////////////////Program Counter Adder/////////////////
 
-    assign PC_in = PC_out + 32'h00000004;
+    assign adder_output = PC_out + 32'h00000004;            // Adder output and PC_in is not connected (connect them in the testbench
 
 //////////////////////////////////////////////////////
 
