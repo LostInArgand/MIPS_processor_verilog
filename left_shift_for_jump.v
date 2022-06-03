@@ -23,7 +23,7 @@
 module left_shift_for_jump(
     input wire [25:0] Instruction,
     input wire [3:0] from_PC,
-    output wire [32:0] Jump_Address
+    output wire [31:0] Jump_Address
     );
     
     wire [27:0] left_shift_instruction;
