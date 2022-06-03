@@ -88,6 +88,20 @@ module processor(
     
     // Load 32bit mux 3
     // I/O format -: zero, one, select, out
-    mux_2_to_1_32bit mux_32bit_3(adder_output, branch_target, Branch, PC_in);
+    wire [31:0] mux_3_out;
+    wire branch_control;
+    assign branch_control = Branch & ALU_zero;
+    mux_2_to_1_32bit mux_32bit_3(adder_output, branch_target, branch_control, mux_3_out);
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////// Datapath for R-type, Load/Store, Branch & Jump ////////////////
+    // Load left shift for jump
+    // I/O format -: Instruction, from_PC + 4, Jump_Address
+    wire [31:0] Jump_Address;
+    left_shift_for_jump left_shift_jump(Instruction[25:0], adder_output, Jump_Address);
+    
+    // Load 32bit mux 4
+    // I/O format -: zero, one, select, out
+    mux_2_to_1_32bit mux_32bit_4(mux_3_out, Jump_Address, Jump, PC_in);
+///////////////////////////////////////////////////////////////////////////////////////////////////
 endmodule
