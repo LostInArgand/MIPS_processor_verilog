@@ -24,12 +24,13 @@ module Instruction_Fetch_Module(
     input RESET,
     input CLK,
 //    input PC_write_enable,
+    input wire [31:0] PC_in,
     output reg [31:0]  IR,
     output wire [31:0] adder_output
     );
     reg [31:0] PC;
     wire [31:0] PC_out;
-    wire [31:0] PC_in;
+//    wire [31:0] PC_in; 
     wire [31:0] read_address;
     wire [31:0] instruction;
     
