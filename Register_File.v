@@ -34,33 +34,9 @@ module Register_File(
     // Therefore the data space should be (2^5) x 32bit
     reg [31:0] Registers[31:0];
     
-    //First clear the register file
-    //Not sure whether this is necessary
-//     initial begin
-//        Registers[0] <= 32'h00000000;
-//        Registers[1] <= 32'h00000000;
-//        Registers[2] <= 32'h00000000;
-//        Registers[3] <= 32'h00000000;
-//        Registers[4] <= 32'h00000000;
-//        Registers[5] <= 32'h00000000;
-//        Registers[6] <= 32'h00000000;
-//        Registers[7] <= 32'h00000000;
-//        Registers[8] <= 32'h00000000;
-//        Registers[9] <= 32'h00000000;
-//        Registers[10] <= 32'h00000000;
-//        Registers[11] <= 32'h00000000;
-//        Registers[12] <= 32'h00000000;
-//        Registers[13] <= 32'h00000000;
-//        Registers[14] <= 32'h00000000;
-//        Registers[15] <= 32'h00000000;
-//        Registers[16] <= 32'h00000000;
-//        Registers[17] <= 32'h00000000;.............
-        
-//     end
-    
     
     //Instruction register is updated at negative edge (latched at positive edge)
-    always @(negedge CLK)
+    always @(Read_Register_1 or Read_Register_2)
     begin
         Read_Data_1 <= Registers[Read_Register_1];
         Read_Data_2 <= Registers[Read_Register_2];
@@ -71,4 +47,23 @@ module Register_File(
     begin
         if (RegWrite) Registers[Write_Register] <= Write_Data;
     end
+  
+//////////// Load values for the testing ///////////////
+    initial begin
+    // Initialize
+        Registers[0] <= 32'd0;
+        Registers[1] <= 32'd0;
+        Registers[2] <= 32'd0;
+        Registers[3] <= 32'd0;
+        Registers[4] <= 32'd0;
+        Registers[5] <= 32'd0;
+        Registers[6] <= 32'd0;
+        Registers[7] <= 32'd0;
+        Registers[8] <= 32'd0;
+        Registers[9] <= 32'd0;
+        Registers[10] <= 32'd0;
+        Registers[11] <= 32'd0;
+    end
+///////////////////////////////////////////////////////
+
 endmodule
