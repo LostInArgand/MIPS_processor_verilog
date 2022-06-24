@@ -91,22 +91,43 @@ module Instruction_Fetch_Module(
     initial begin
     // Initialize
         instruction_memory[0] <= {6'd0, 5'd0, 5'd0, 5'd1, 5'd0, 6'h20};
-    // Test Addition => 12 + 327 = 339 => r-type rs[2] rt[3] rd[4] add
-        instruction_memory[1] <= {6'd0, 5'd2, 5'd3, 5'd4, 5'd0, 6'h20};
-    // Test Substraction => 339 - 100 = 239 => r-type rs[4] rt[5] rd[6] sub
-        instruction_memory[2] <= {6'd0, 5'd4, 5'd5, 5'd6, 5'd0, 6'h22};
-    // Test AND => 47583 AND 125543 = 43079 => r-type rs[7] rt[8] rd[9] AND
-        instruction_memory[3] <= {6'd0, 5'd7, 5'd8, 5'd9, 5'd0, 6'h24};
-    // Test OR => 47583 OR 125543 = 130047 => r-type rs[7] rt[8] rd[10] OR
-        instruction_memory[4] <= {6'd0, 5'd7, 5'd8, 5'd10, 5'd0, 6'h25};
-    // Test set less than => 43079 < 130047 => r-type rs[9] rt[10] rd[11] slt
-        instruction_memory[5] <= {6'd0, 5'd9, 5'd10, 5'd11, 5'd0, 6'h2a};
+    // Test Addition => 12 + 327 = 339.
+        // Here, load word and write word instructions are also tested
+        // Load 12 => Load word from data memory[1] and store it in register[2]
+        instruction_memory[1] <= {6'h23, 5'd0, 5'd2, 16'd4};   // Memory is byte addresssable
+        // Load 327 => Load word from data memory[2] and store it in register[3]
+        instruction_memory[2] <= {6'h23, 5'd0, 5'd3, 16'd8};   // Memory is byte addresssable
+        // r-type rs[2] rt[3] rd[4] add
+        instruction_memory[3] <= {6'd0, 5'd2, 5'd3, 5'd4, 5'd0, 6'h20};
+        // Write result => Write result in register[4] to memory[3]
+        instruction_memory[4] <= {6'h2b, 5'd0, 5'd4, 16'd12};   // Memory is byte addresssable
+ 
+    // Test Substraction => 339 - 100 = 239
+        // Load result from memory[3] to register[2]
+        instruction_memory[5] <= {6'h23, 5'd0, 5'd2, 16'd12};   // Memory is byte addresssable
+        // Load 100 => Load word from data memory[4] and store it in register[3]
+        instruction_memory[6] <= {6'h23, 5'd0, 5'd3, 16'd16};   // Memory is byte addresssable
+        // r-type rs[2] rt[3] rd[5] sub
+        instruction_memory[7] <= {6'd0, 5'd2, 5'd3, 5'd5, 5'd0, 6'h22};
+
+    // Test AND => 47583 AND 125543 = 43079
+        // Load 47583 from memory[5] to register[2]
+        instruction_memory[8] <= {6'h23, 5'd0, 5'd2, 16'd20};   // Memory is byte addresssable
+        // Load 125543 from memory[6] to register[3]
+        instruction_memory[9] <= {6'h23, 5'd0, 5'd3, 16'd24};   // Memory is byte addresssable
+        // r-type rs[2] rt[3] rd[4] AND
+        instruction_memory[10] <= {6'd0, 5'd2, 5'd3, 5'd4, 5'd0, 6'h24};
+
+    // Test OR => 47583 OR 125543 = 130047 => r-type rs[2] rt[3] rd[5] OR
+        instruction_memory[11] <= {6'd0, 5'd2, 5'd3, 5'd5, 5'd0, 6'h25};
+
+    // Test set less than => 43079 < 130047 => r-type rs[4] rt[5] rd[6] slt
+        instruction_memory[12] <= {6'd0, 5'd4, 5'd5, 5'd6, 5'd0, 6'h2a};
     // Test set less than => 130047 < 43079 => r-type rs[10] rt[9] rd[11] slt
-        instruction_memory[6] <= {6'd0, 5'd10, 5'd9, 5'd12, 5'd0, 6'h2a};
-    // Test load word => Load word from data memory[1] and store it in register[13]
-        instruction_memory[7] <= {6'h23, 5'd0, 5'd13, 16'd4};   // Memory is byte addresssable
+        instruction_memory[13] <= {6'd0, 5'd5, 5'd4, 5'd6, 5'd0, 6'h2a};
+
     end
-/////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
