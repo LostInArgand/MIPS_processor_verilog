@@ -27,20 +27,17 @@ module ALU_control(
     );
     
     // Update ALUoperation whenever there is a control instruction
-    always @(instruction)
+    always @(ALUOp or instruction)
     // Using the truth table of the MIPS_architecture
     begin
-        if (ALUOp[1] == 1) begin
-            if (instruction[3:0] == 4'b0000) ALUoperation <= 4'b0010;
-            if (instruction[3:0] == 4'b0010) ALUoperation <= 4'b0110;
-            if (instruction[3:0] == 4'b0100) ALUoperation <= 4'b0000;
-            if (instruction[3:0] == 4'b0101) ALUoperation <= 4'b0001;
-            if (instruction[3:0] == 4'b1010) ALUoperation <= 4'b0111;
-        end
-        else
-        begin
-            if (ALUOp[0] == 0) ALUoperation <= 4'b0010;
-            else ALUoperation <= 4'b0110;
+        if (ALUOp == 2'b00) ALUoperation <= 4'b0010;                   // add
+        else if (ALUOp == 2'bx1) ALUoperation <= 4'b0110;              // subtract (with 2s complement)
+        else begin
+            if (instruction[3:0] == 4'b0000) ALUoperation <= 4'b0010;   // add
+            if (instruction[3:0] == 4'b0010) ALUoperation <= 4'b0110;   // subtract (with 2s complement)
+            if (instruction[3:0] == 4'b0100) ALUoperation <= 4'b0000;   // AND
+            if (instruction[3:0] == 4'b0101) ALUoperation <= 4'b0001;   // OR
+            if (instruction[3:0] == 4'b1010) ALUoperation <= 4'b0111;   // Set less than
         end
     end
 endmodule
