@@ -73,7 +73,7 @@ module processor(
     // Load Data memory
     // I/O format -: address, write_data, mem_write, mem_read, CLK, read_data
     wire [31:0] Read_data_mem;
-    data_memory data_mem(ALU_result, read_data_2, MemWrite, MemRead, CLK, Read_data_mem);
+    data_memory data_mem(ALU_result, read_data_2, memWrite, MemRead, CLK, Read_data_mem);
     
     // Load 32bit mux 2
     // I/O format -: zero, one, select, out
