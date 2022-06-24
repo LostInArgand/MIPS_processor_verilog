@@ -33,14 +33,27 @@ module data_memory(
     reg [31:0] memory[0:63];
     
     // According to the data sheet, only write is edge triggered by clock
-    always @(mem_read)
+    always @(mem_read or address)
     begin
-        // Avoid writing while reading data
-        if((~mem_write) & (mem_read)) read_data <= memory[address >> 2];
+        // Avoid writing while reading data (This is avoided in control unit)
+        if(mem_read) read_data <= memory[address >> 2];
     end
     // According to the data sheet, only write is edge triggered by clock
     always @(posedge CLK)
     begin
         if (mem_write == 1'b1) memory[address >> 2] <= write_data;
     end
+    
+/////////////////////////////////////////////////////
+    // Store Data for the testing //
+    initial begin
+        memory[0] <= 32'd0;
+        memory[1] <= 32'd12;
+        memory[2] <= 32'd327;
+        
+        memory[4] <= 32'd100;
+        memory[5] <= 32'd47583;
+        memory[6] <= 32'd125543;
+    end
+/////////////////////////////////////////////////////
 endmodule
