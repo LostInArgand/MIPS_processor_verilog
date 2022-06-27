@@ -31,7 +31,7 @@ module ALU_control(
     // Using the truth table of the MIPS_architecture
     begin
         if (ALUOp == 2'b00) ALUoperation <= 4'b0010;                   // add
-        else if (ALUOp == 2'bx1) ALUoperation <= 4'b0110;              // subtract (with 2s complement)
+        else if ((ALUOp == 2'b01) || (ALUOp == 2'b11)) ALUoperation <= 4'b0110;              // subtract (with 2s complement)
         else begin
             if (instruction[3:0] == 4'b0000) ALUoperation <= 4'b0010;   // add
             if (instruction[3:0] == 4'b0010) ALUoperation <= 4'b0110;   // subtract (with 2s complement)

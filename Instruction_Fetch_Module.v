@@ -123,9 +123,33 @@ module Instruction_Fetch_Module(
 
     // Test set less than => 43079 < 130047 => r-type rs[4] rt[5] rd[6] slt
         instruction_memory[12] <= {6'd0, 5'd4, 5'd5, 5'd6, 5'd0, 6'h2a};
-    // Test set less than => 130047 < 43079 => r-type rs[10] rt[9] rd[11] slt
+    // Test set less than => 130047 < 43079 => r-type rs[5] rt[4] rd[6] slt
         instruction_memory[13] <= {6'd0, 5'd5, 5'd4, 5'd6, 5'd0, 6'h2a};
 
+    // Test Branch on Equal instruction
+        // Compare register register[2] (47583) with register[3]
+        // Load 47583 to register[3]
+        instruction_memory[14] <= {6'h23, 5'd0, 5'd3, 16'd20};   // Memory is byte addresssable
+        // If register[2] == register[4], goto instruction number 21
+        // beq rs[2] rt[4] offset
+        instruction_memory[15] <= {6'h4, 5'd2, 5'd4, 16'd5};
+        // If register[2] == register[3], goto instruction number 21
+        // beq rs[2] rt[3] offset
+        instruction_memory[16] <= {6'h4, 5'd2, 5'd3, 16'd4};
+        
+      // These instructions are skipped
+        instruction_memory[17] <= {6'h23, 5'd0, 5'd4, 16'd20};   // Memory is byte addresssable
+        instruction_memory[18] <= {6'h23, 5'd0, 5'd4, 16'd20};   // Memory is byte addresssable
+        instruction_memory[19] <= {6'h23, 5'd0, 5'd4, 16'd20};   // Memory is byte addresssable
+        instruction_memory[20] <= {6'h23, 5'd0, 5'd4, 16'd20};   // Memory is byte addresssable
+        
+       // If beq is executing properly, substract register[3] from register[2]
+         // r-type rs[2] rt[3] rd[4] sub
+        instruction_memory[21] <= {6'd0, 5'd2, 5'd3, 5'd4, 5'd0, 6'h22};
+
+      // Test jump instruction
+        // Jump to instruction 5 (No need to multiply by 4)
+        instruction_memory[22] <= {6'h2, 26'd5};
     end
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
