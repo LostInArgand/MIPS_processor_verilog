@@ -98,7 +98,7 @@ module processor(
     // Load left shift for jump
     // I/O format -: Instruction, from_PC + 4, Jump_Address
     wire [31:0] Jump_Address;
-    left_shift_for_jump left_shift_jump(Instruction[25:0], adder_output, Jump_Address);
+    left_shift_for_jump left_shift_jump(Instruction[25:0], adder_output[31:28], Jump_Address);
     
     // Load 32bit mux 4
     // I/O format -: zero, one, select, out
